@@ -1,0 +1,892 @@
+/* 강원도 틈새여행 스타일
+   색상: 메인 그린 #3F8A6E · 연그린 #6DBE9A · 민트 #E8F5EE · 크림 화이트 #FFFCF5
+   등급 파스텔: 여유 민트 / 보통 버터 / 주의 피치 / 혼잡 로즈 */
+
+:root {
+    --green-900: #2E5E4E;
+    --green-700: #3F8A6E;
+    --green-500: #6DBE9A;
+    --green-200: #CDEBDD;
+    --green-100: #E8F5EE;
+    --green-50:  #F4FBF7;
+    --cream:     #FFFCF5;
+    --text:      #34433D;
+    --muted:     #7A8A83;
+    --line:      #DCEBE2;
+    --shadow:    0 6px 20px rgba(63, 138, 110, 0.10);
+}
+
+/* ---------- 1. 기본 요소 숨기기 (Deploy 버튼, 메뉴, 푸터, 상단 장식선) ---------- */
+#MainMenu,
+[data-testid="stMainMenu"],
+[data-testid="stAppDeployButton"],
+.stAppDeployButton,
+[data-testid="stToolbar"],
+[data-testid="stDecoration"],
+footer {
+    display: none !important;
+}
+header[data-testid="stHeader"] {
+    background: transparent;
+    height: 0;
+}
+
+/* ---------- 2. 폰트와 배경 ---------- */
+html, body, .stApp, .stMarkdown, input, textarea, button, label {
+    font-family: 'Noto Sans KR', sans-serif;
+}
+h1, h2, h3, h4 {
+    font-family: 'Noto Sans KR', sans-serif;
+    color: var(--green-900);
+    letter-spacing: -0.01em;
+}
+.stApp {
+    background:
+        radial-gradient(circle at 8% 0%, #E3F4EA 0, transparent 360px),
+        radial-gradient(circle at 96% 4%, #FFF1DC 0, transparent 300px),
+        var(--cream);
+    color: var(--text);
+}
+.block-container {
+    padding-top: 1.6rem;
+    max-width: 1320px;
+}
+hr {
+    border-color: var(--line) !important;
+}
+
+/* ---------- 3. 상단 소개 배너 ---------- */
+.hero {
+    position: relative;
+    overflow: hidden;
+    padding: 28px 32px;
+    margin-bottom: 18px;
+    border-radius: 26px;
+    background: linear-gradient(120deg, #DDF1E5 0%, #F1F9F4 55%, #FFF4E3 100%);
+    border: 1px solid var(--line);
+    box-shadow: var(--shadow);
+}
+.hero::after {
+    content: "⛰️🌲🌿";
+    position: absolute;
+    right: 28px;
+    bottom: 10px;
+    font-size: 54px;
+    opacity: 0.35;
+    letter-spacing: 6px;
+}
+.hero-eyebrow {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 999px;
+    background: #FFFFFFCC;
+    color: var(--green-700);
+    font-size: 13px;
+    font-weight: 700;
+}
+.hero-title {
+    margin: 10px 0 6px;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 44px;
+    line-height: 1.15;
+    color: var(--green-900);
+    font-weight: 900;
+}
+.hero-sub {
+    margin: 0;
+    color: #55665F;
+    font-size: 16px;
+}
+
+/* ---------- 4. 메뉴 (라디오 → 알약 탭) ---------- */
+.st-key-active_page [role="radiogroup"] {
+    gap: 8px;
+}
+.st-key-active_page [role="radiogroup"] label {
+    padding: 6px 18px;
+    border-radius: 999px;
+    background: #FFFFFF;
+    border: 1px solid var(--line);
+    transition: all .15s ease;
+}
+.st-key-active_page [role="radiogroup"] label:has(input:checked) {
+    background: var(--green-700);
+    border-color: var(--green-700);
+}
+.st-key-active_page [role="radiogroup"] label:has(input:checked) p {
+    color: #FFFFFF;
+    font-weight: 700;
+}
+.st-key-active_page [data-testid="stRadioOption"] > div > div:first-child:not([data-testid]) {
+    display: none;   /* 라디오 동그라미 숨김 */
+}
+
+/* ---------- 5. 카드 박스 (검색창, 관광지 카드, My Course) ---------- */
+.st-key-search_box,
+.st-key-course_panel,
+[class*="st-key-card_"] {
+    background: #FFFFFF;
+    border: 1px solid var(--line) !important;
+    border-radius: 22px !important;
+    box-shadow: var(--shadow);
+}
+
+/* 검색창 */
+.st-key-search_box {
+    padding: 18px 22px 8px;
+}
+
+/* My Course */
+.st-key-course_panel {
+    padding: 18px 18px 14px;
+    background: linear-gradient(
+        180deg,
+        #FFFFFF 0%,
+        var(--green-50) 100%
+    );
+}
+
+/* 관광지 카드 */
+[class*="st-key-card_"] {
+    padding: 18px 18px 12px;
+    transition: transform .15s ease, box-shadow .15s ease;
+}
+
+[class*="st-key-card_"]:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 28px rgba(63, 138, 110, 0.18);
+}
+
+
+.st-key-search_box {
+    padding: 18px 22px 18px;
+}
+.st-key-search_box [data-testid="stForm"] {
+    border: none;
+    padding: 0;
+}
+.st-key-course_panel {
+    padding: 18px 18px 14px;
+    background: linear-gradient(180deg, #FFFFFF 0%, var(--green-50) 100%);
+}
+[class*="st-key-card_"] {
+    padding: 18px 18px 12px;
+    transition: transform .15s ease, box-shadow .15s ease;
+}
+[class*="st-key-card_"]:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 28px rgba(63, 138, 110, 0.18);
+}
+
+.section-title {
+    margin: 4px 0 10px;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--green-900);
+}
+
+/* 카드 안쪽 */
+.card-name {
+    margin: 0 0 8px;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 21px;
+    line-height: 1.3;
+    color: var(--green-900);
+}
+.grade-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 12px;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 700;
+}
+.score-text {
+    margin-left: 8px;
+    color: var(--muted);
+    font-size: 14px;
+}
+.peak-text {
+    margin: 6px 0 0;
+    color: var(--muted);
+    font-size: 13px;
+}
+.info-list {
+    margin: 4px 0 6px;
+    padding: 10px 12px;
+    border-radius: 14px;
+    background: var(--green-30);
+    font-size: 13.5px;
+    line-height: 1.6;
+}
+.info-row {
+    display: flex;
+    gap: 8px;
+}
+.info-row b {
+    flex: 0 0 64px;
+    color: var(--green-700);
+    font-weight: 700;
+}
+.info-row span {
+    color: var(--text);
+    word-break: keep-all;
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
+/* 조건 요약 칩 */
+.chip-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 2px 0 14px;
+}
+.chip {
+    padding: 5px 12px;
+    border-radius: 999px;
+    background: #FFFFFF;
+    border: 1px solid var(--line);
+    color: var(--text);
+    font-size: 13.5px;
+}
+.chip b {
+    color: var(--green-700);
+}
+
+/* ---------- 6. 날씨 카드 ---------- */
+.weather-wrap {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 10px;
+    margin-bottom: 16px;
+}
+.weather-card {
+    padding: 12px 14px;
+    border-radius: 18px;
+    background: linear-gradient(160deg, #FFFFFF 0%, #F0F8FF 100%);
+    border: 1px solid #DCE9F2;
+}
+.weather-card.big {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding: 16px 22px;
+}
+.weather-icon {
+    font-size: 30px;
+    line-height: 1;
+}
+.weather-card.big .weather-icon {
+    font-size: 46px;
+}
+.weather-region {
+    color: var(--muted);
+    font-size: 13px;
+}
+.weather-main {
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 22px;
+    color: #2F5470;
+}
+.weather-meta {
+    color: var(--muted);
+    font-size: 12.5px;
+}
+
+/* ---------- 7. 버튼 ---------- */
+.stButton > button,
+[data-testid="stFormSubmitButton"] > button {
+    border-radius: 999px;
+    font-weight: 700;
+    transition: all .15s ease;
+}
+[data-testid^="stBaseButton-primary"] {
+    background: linear-gradient(135deg, #5FB38E 0%, #3F8A6E 100%);
+    border: none;
+    color: #FFFFFF;
+    box-shadow: 0 4px 12px rgba(63, 138, 110, 0.28);
+}
+[data-testid^="stBaseButton-primary"]:hover {
+    filter: brightness(1.05);
+    transform: translateY(-1px);
+    color: #FFFFFF;
+}
+[data-testid^="stBaseButton-secondary"] {
+    background: #FFFFFF;
+    border: 1px solid var(--green-200);
+    color: var(--green-700);
+}
+[data-testid^="stBaseButton-secondary"]:hover {
+    background: var(--green-100);
+    border-color: var(--green-500);
+    color: var(--green-900);
+}
+
+/* ---------- 8. 사이드바 (사이드바를 쓸 때 적용) ---------- */
+[data-testid="stSidebar"] {
+    background: linear-gradient(180deg, #EAF6EF 0%, #FFFCF5 100%);
+    border-right: 1px solid var(--line);
+}
+[data-testid="stSidebar"] h1,
+[data-testid="stSidebar"] h2,
+[data-testid="stSidebar"] h3 {
+    color: var(--green-900);
+}
+
+/* ---------- 9. My Course 시간표 ---------- */
+
+.st-key-course_panel [data-testid="stVerticalBlock"] {
+    gap: 0.35rem;
+}
+
+/* 
+.timeline-grid {
+    display: grid;
+    grid-template-columns: 52px minmax(0, 1fr);
+    grid-template-rows: repeat(24, 54px);
+    gap: 0;
+    position: relative;
+    width: 100%;
+    margin: 8px 0 16px;
+}
+
+.timeline-hour-label {
+    grid-column: 1;
+    display: flex;
+    align-items: flex-start;
+    padding-top: 7px;
+    box-sizing: border-box;
+    border-top: 1px dashed #E8F1EB;
+    color: #8A9B92;
+    font-size: 12px;
+    font-variant-numeric: tabular-nums;
+}
+*/
+
+/* 일정 카드 
+.timeline-grid-card {
+    z-index: 1;
+    min-height: 0;
+    margin: 2px 0 3px 6px;
+    padding: 5px 9px;
+    overflow: hidden;
+    box-sizing: border-box;
+    border: 1px solid #DCEBE2;
+    border-left: 4px solid #6DBE9A;
+    border-radius: 10px;
+    background: linear-gradient(
+        135deg,
+        #F4FBF7 0%,
+        #E8F5EE 100%
+    );
+}*/
+
+/* 관광지명 
+.timeline-grid-title {
+    color: #2E5E4E;
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 1.35;
+    overflow-wrap: anywhere;
+}*/
+
+/* 시작 시간 및 이용 시간 
+.timeline-grid-meta {
+    margin-top: 2px;
+    color: #7A8A83;
+    font-size: 11px;
+    line-height: 1.25;
+} */
+
+
+.st-key-course_panel [data-testid="stButton"] button {
+    min-height: 32px;
+    padding: 0 8px;
+    border-radius: 9px;
+}
+
+
+
+/* 검색 전 안내 메시지만 스타일 변경 */
+.st-key-search_empty_notice [data-testid="stAlert"],
+.st-key-search_empty_notice [data-testid="stAlert"] > div,
+.st-key-search_empty_notice [data-testid="stAlert"] [data-testid="stAlertContent"] {
+    background-color: #F4FBF7 !important;
+    border-color: #DCEBE2 !important;
+    border-radius: 12px !important;
+    box-shadow: none !important;
+}
+
+/* 안내 문구 */
+.st-key-search_empty_notice [data-testid="stAlert"] p,
+.st-key-search_empty_notice [data-testid="stAlert"] [data-testid="stMarkdownContainer"] {
+    color: #3F6F5A !important;
+}
+
+/* 안내 아이콘 */
+.st-key-search_empty_notice [data-testid="stAlert"] svg {
+    color: #3F8A6E !important;
+}
+
+/* 입력 필드 배경과 테두리 */
+.st-key-search_box input,
+.st-key-search_box [data-baseweb="select"] > div {
+    border-color: #DCEBE2;
+    border-radius: 10px;
+}
+
+.st-key-search_box input:focus {
+    border-color: #3F8A6E;
+    box-shadow: 0 0 0 1px #3F8A6E;
+}
+
+
+/* 안내 문구 색상 */
+.st-key-search_empty_notice [data-testid="stAlert"] p {
+    color: #3F6F5A !important;
+}
+
+/* 안내 아이콘 색상 */
+.st-key-search_empty_notice [data-testid="stAlert"] svg {
+    color: #3F8A6E !important;
+    fill: #3F8A6E !important;
+}
+
+
+
+
+/* ==========================================
+   정렬 기준
+========================================== */
+
+.sort-label {
+    display: flex;
+    align-items: center;
+    min-height: 42px;
+    color: #587463;
+    font-size: 0.88rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+}
+
+
+/* ==========================================
+   정렬 셀렉트박스 전용 스타일
+   다른 필터에는 영향 없음
+========================================== */
+
+/* ========================================
+   정렬 옵션 전용 스타일
+   ======================================== */
+
+/* 정렬 콤보박스 전체 */
+div.react-aria-ComboBox:has(input[aria-label="정렬 기준"]) {
+    width: 100%;
+}
+
+/* 입력창 + 화살표 버튼 영역 */
+div.react-aria-ComboBox:has(input[aria-label="정렬 기준"])
+> div[role="group"] {
+    min-height: 40px;
+    background: #F3F8F4 !important;
+    border: 1px solid #DCE7DE !important;
+    border-radius: 999px !important;
+    box-shadow: none !important;
+    overflow: hidden;
+    transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+/* 마우스를 올렸을 때 */
+div.react-aria-ComboBox:has(input[aria-label="정렬 기준"])
+> div[role="group"]:hover {
+    background: #EAF3EC !important;
+    border-color: #B9D0BE !important;
+}
+
+/* 정렬 텍스트 입력창 */
+div.react-aria-ComboBox input[aria-label="정렬 기준"] {
+    background: transparent !important;
+    color: #456B53 !important;
+    font-size: 0.82rem !important;
+    font-weight: 600 !important;
+    padding-left: 15px !important;
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+/* 오른쪽 화살표 버튼 */
+div.react-aria-ComboBox:has(input[aria-label="정렬 기준"])
+button[aria-label="Open"] {
+    background: transparent !important;
+    color: #64816E !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding-right: 12px;
+}
+
+/* 키보드 포커스 시 */
+div.react-aria-ComboBox:has(input[aria-label="정렬 기준"])
+> div[role="group"]:focus-within {
+    border-color: #8FB49A !important;
+    box-shadow: 0 0 0 2px rgba(143, 180, 154, 0.15) !important;
+}
+
+
+
+/* My Course - 코스 확인 버튼 */
+.st-key-course_panel .course-confirm-btn {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    text-align: center;
+    background: linear-gradient(135deg, #5FB38E 0%, #3F8A6E 100%);
+    box-shadow: 0 4px 12px rgba(63, 138, 110, 0.28);
+    color: white !important;
+    border-radius: 30px;
+    text-decoration: none !important;
+    font-weight: 700;
+    box-sizing: border-box;
+    transition: background-color 0.2s ease,
+                box-shadow 0.2s ease,
+                transform 0.2s ease;
+}
+
+/* 마우스 호버 */
+.st-key-course_panel .course-confirm-btn:hover {
+    filter: brightness(1.05);
+    transform: translateY(-1px);
+    color: #FFFFFF;
+}
+
+/* 클릭하는 순간 */
+.st-key-course_panel .course-confirm-btn:active {
+    transform: translateY(0);
+    box-shadow: none;
+}
+
+
+
+/* ===== 추가된 HOME 전용 스타일 ===== */
+.st-key-home_page {
+    color: var(--text);
+}
+.st-key-home_page .home-hero::after {
+    content: "⛰️   🌲   🌿";
+    position: absolute;
+    z-index: -1;
+    right: 24px;
+    bottom: 10px;
+    font-size: clamp(34px, 4.5vw, 60px);
+    letter-spacing: 4px;
+    opacity: .32;
+    pointer-events: none;
+}
+.st-key-home_page .home-hero-kicker {
+    display: inline-block;
+    padding: 5px 12px;
+    border-radius: 999px;
+    background: rgba(255,255,255,.82);
+    color: var(--green-700);
+    font-size: 13px;
+    font-weight: 750;
+}
+.st-key-home_page .home-hero h1 {
+    position: relative;
+    z-index: 1;
+    margin: 12px 0 6px;
+    color: var(--green-900);
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: clamp(32px, 3.6vw, 44px);
+    font-weight: 800;
+    line-height: 1.22;
+    letter-spacing: -.045em;
+}
+.st-key-home_page .home-hero p {
+    position: relative;
+    z-index: 1;
+    max-width: 760px;
+    margin: 0;
+    color: #526A5D;
+    font-size: 16px;
+    line-height: 1.7;
+}
+.st-key-home_page .home-hero-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 17px;
+}
+.st-key-home_page .home-hero-tags span {
+    display: inline-block;
+    padding: 6px 11px;
+    border: 1px solid rgba(63,138,110,.16);
+    border-radius: 999px;
+    background: rgba(255,255,255,.72);
+    color: #3D7059;
+    font-size: 13px;
+    font-weight: 650;
+}
+
+/* 홈 화면의 소개 문구와 섹션 제목 */
+.st-key-home_page [data-testid="stCaptionContainer"] {
+    color: var(--muted);
+    line-height: 1.65;
+}
+.st-key-home_page h2,
+.st-key-home_page h3,
+.st-key-home_page h4 {
+    color: var(--green-900);
+    letter-spacing: -.025em;
+}
+.st-key-home_page h2 { font-size: 1.45rem; }
+.st-key-home_page h3 { font-size: 1.25rem; }
+
+/* 홈 요약 지표 카드 */
+.st-key-home_page [data-testid="stMetric"] {
+    min-height: 106px;
+    padding: 16px 18px 13px;
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    background: rgba(255,255,255,.88);
+    box-shadow: 0 5px 16px rgba(46,94,78,.055);
+}
+.st-key-home_page [data-testid="stMetricLabel"] {
+    color: #668174;
+    font-size: 13px;
+    font-weight: 650;
+}
+.st-key-home_page [data-testid="stMetricValue"] {
+    color: var(--green-900);
+    font-weight: 800;
+}
+
+/* 홈 화면의 그래프와 표를 부드러운 카드 형태로 */
+.st-key-home_page [data-testid="stPlotlyChart"],
+.st-key-home_page [data-testid="stDataFrame"],
+.st-key-home_page [data-testid="stPydeckChart"] {
+    overflow: hidden;
+    border: 1px solid #E1ECE4;
+    border-radius: 16px;
+    background: rgba(255,255,255,.88);
+}
+.st-key-home_page [data-testid="stAlert"] {
+    border-radius: 14px;
+}
+.st-key-home_page hr {
+    margin: 25px 0;
+    border-color: #DCEBE2 !important;
+}
+
+@media (max-width: 700px) {
+    .st-key-home_page .home-hero {
+        padding: 23px 20px;
+        border-radius: 20px;
+    }
+    .st-key-home_page .home-hero::after {
+        right: 10px;
+        bottom: 8px;
+        font-size: 34px;
+    }
+    .st-key-home_page .home-hero p {
+        max-width: 84%;
+        font-size: 14px;
+    }
+    .st-key-home_page .home-hero-tags {
+        gap: 6px;
+        margin-top: 13px;
+    }
+    .st-key-home_page .home-hero-tags span {
+        padding: 5px 8px;
+        font-size: 12px;
+    }
+}
+
+
+/* =====================================================
+   HOME 05. 상단 요약 지표 카드
+   ===================================================== */
+
+/* 공통 카드 */
+.st-key-summary_card_1,
+.st-key-summary_card_2,
+.st-key-summary_card_3,
+.st-key-summary_card_4 {
+    min-height: 120px;
+    padding: 18px 18px 14px;
+
+    border: 1px solid #D5E5DA;
+    border-radius: 20px;
+
+    box-shadow: 0 5px 16px rgba(46, 94, 78, 0.07);
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+/* 카드별 배경색 */
+.st-key-summary_card_1 {
+    background: #E2F0E7;
+    border-color: #C8DFD0;
+}
+
+.st-key-summary_card_2 {
+    background: #DDF2EE;
+    border-color: #C3E3DC;
+}
+
+.st-key-summary_card_3 {
+    background: #FFF1D6;
+    border-color: #F0DDB5;
+}
+
+.st-key-summary_card_4 {
+    background: #F9E5DA;
+    border-color: #EED1C1;
+}
+
+/* 카드 내부의 Streamlit metric */
+.st-key-summary_card_1 [data-testid="stMetric"],
+.st-key-summary_card_2 [data-testid="stMetric"],
+.st-key-summary_card_3 [data-testid="stMetric"],
+.st-key-summary_card_4 [data-testid="stMetric"] {
+    padding: 0;
+    border: none;
+    background: transparent;
+    box-shadow: none;
+}
+
+/* 지표 이름 */
+.st-key-summary_card_1 [data-testid="stMetricLabel"],
+.st-key-summary_card_2 [data-testid="stMetricLabel"],
+.st-key-summary_card_3 [data-testid="stMetricLabel"],
+.st-key-summary_card_4 [data-testid="stMetricLabel"] {
+    color: #526A5D;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+/* 숫자 및 지역명 */
+.st-key-summary_card_1 [data-testid="stMetricValue"],
+.st-key-summary_card_2 [data-testid="stMetricValue"],
+.st-key-summary_card_3 [data-testid="stMetricValue"],
+.st-key-summary_card_4 [data-testid="stMetricValue"] {
+    color: #285B49;
+    font-size: clamp(21px, 2vw, 29px);
+    font-weight: 800;
+    line-height: 1.35;
+    overflow-wrap: anywhere;
+}
+
+/* 마우스를 올렸을 때 살짝 강조 */
+.st-key-summary_card_1:hover,
+.st-key-summary_card_2:hover,
+.st-key-summary_card_3:hover,
+.st-key-summary_card_4:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 9px 22px rgba(46, 94, 78, 0.12);
+}
+
+/* 좁은 화면에서는 카드 높이와 여백 조정 */
+@media (max-width: 700px) {
+    .st-key-summary_card_1,
+    .st-key-summary_card_2,
+    .st-key-summary_card_3,
+    .st-key-summary_card_4 {
+        min-height: 100px;
+        padding: 12px;
+        border-radius: 15px;
+    }
+
+    .st-key-summary_card_1 [data-testid="stMetricValue"],
+    .st-key-summary_card_2 [data-testid="stMetricValue"],
+    .st-key-summary_card_3 [data-testid="stMetricValue"],
+    .st-key-summary_card_4 [data-testid="stMetricValue"] {
+        font-size: 19px;
+    }
+}
+/* =====================================================
+   HOME 03. 분석 섹션 통합 스타일
+   ===================================================== */
+
+.st-key-home_section_1,
+.st-key-home_section_2,
+.st-key-home_section_3,
+.st-key-home_section_4 {
+    margin: 16px 0 26px;
+    padding: 24px;
+    border: 1px solid #DCE9E0;
+    border-radius: 22px;
+    background: linear-gradient(
+        145deg,
+        #FFFFFF 0%,
+        #F2F8F4 100%
+    );
+    box-shadow: 0 5px 18px rgba(40, 91, 73, 0.06);
+    transition: box-shadow 0.2s ease;
+}
+
+.st-key-home_section_1:hover,
+.st-key-home_section_2:hover,
+.st-key-home_section_3:hover,
+.st-key-home_section_4:hover {
+    box-shadow: 0 8px 24px rgba(40, 91, 73, 0.10);
+}
+
+/* 섹션 제목 */
+.st-key-home_section_1 h2,
+.st-key-home_section_2 h2,
+.st-key-home_section_3 h2,
+.st-key-home_section_4 h2 {
+    color: #285B49;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+}
+
+/* 설명 문구 */
+.st-key-home_section_1 [data-testid="stCaptionContainer"],
+.st-key-home_section_2 [data-testid="stCaptionContainer"],
+.st-key-home_section_3 [data-testid="stCaptionContainer"],
+.st-key-home_section_4 [data-testid="stCaptionContainer"] {
+    color: #708477;
+    line-height: 1.65;
+}
+
+/* 그래프 */
+.st-key-home_section_1 [data-testid="stPlotlyChart"],
+.st-key-home_section_2 [data-testid="stPlotlyChart"],
+.st-key-home_section_3 [data-testid="stPlotlyChart"],
+.st-key-home_section_4 [data-testid="stPlotlyChart"] {
+    border: 1px solid #E1ECE4;
+    border-radius: 16px;
+    background: #FFFFFF;
+}
+
+/* 표 */
+.st-key-home_section_1 [data-testid="stDataFrame"],
+.st-key-home_section_4 [data-testid="stDataFrame"] {
+    border: 1px solid #DCE9E0;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+/* 안내 박스 */
+.st-key-home_section_2 [data-testid="stAlert"] {
+    border-radius: 14px;
+    border: 1px solid #C8DFD0;
+}
+
+/* 모바일 */
+@media (max-width: 700px) {
+    .st-key-home_section_1,
+    .st-key-home_section_2,
+    .st-key-home_section_3,
+    .st-key-home_section_4 {
+        margin: 12px 0;
+        padding: 14px;
+        border-radius: 15px;
+    }
+}

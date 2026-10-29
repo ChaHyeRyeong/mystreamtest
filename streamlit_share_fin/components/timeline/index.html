@@ -1,0 +1,226 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        font-family: "Noto Sans KR", sans-serif;
+        color: #34433D;
+    }
+
+    .timeline {
+        display: grid;
+        grid-template-columns: 52px minmax(0, 1fr);
+        grid-template-rows: repeat(24, 36px);
+        width: 100%;
+    }
+
+    .hour {
+        grid-column: 1;
+        padding-top: 7px;
+        border-top: 1px dashed #E8F1EB;
+        color: #8A9B92;
+        font-size: 12px;
+        font-variant-numeric: tabular-nums;
+    }
+
+    .card {
+        grid-column: 2;
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 8px;
+        min-width: 0;
+        margin: 2px 0 3px 6px;
+        padding: 6px 8px 5px 10px;
+        overflow: hidden;
+        border: 1px solid #DCEBE2;
+        border-left: 4px solid #6DBE9A;
+        border-radius: 10px;
+        background: linear-gradient(
+            135deg,
+            #F4FBF7 0%,
+            #E8F5EE 100%
+        );
+    }
+
+    .card-content {
+        flex: 1;
+        min-width: 0;
+        overflow-wrap: anywhere;
+    }
+
+    .card-title {
+        color: #2E5E4E;
+        font-size: 13px;
+        font-weight: 700;
+        line-height: 1.35;
+    }
+
+    .card-meta {
+        margin-top: 2px;
+        color: #7A8A83;
+        font-size: 11px;
+        line-height: 1.25;
+    }
+
+    .delete {
+        flex: 0 0 26px;
+        width: 26px;
+        height: 26px;
+        padding: 0;
+        border: 1px solid #DCEBE2;
+        border-radius: 8px;
+        background: #FFFFFF;
+        color: #7A8A83;
+        font-size: 14px;
+        cursor: pointer;
+    }
+
+    .delete:hover {
+        background: #FCEDEA;
+        border-color: #E8B7AE;
+        color: #B64C40;
+    }
+
+    .empty {
+        grid-column: 2;
+        border-top: 1px dashed #E8F1EB;
+    }
+</style>
+</head>
+<body>
+<div id="timeline" class="timeline"></div>
+
+<script>
+    let latestArgs = {};
+    let lastEventId = 0;
+
+    function sendMessage(type, extra = {}) {
+        window.parent.postMessage({
+            isStreamlitMessage: true,
+            type,
+            ...extra
+        }, "*");
+    }
+
+    function render(args) {
+        latestArgs = args || {};
+
+        const root = document.getElementById("timeline");
+        root.replaceChildren();
+
+        const items = Array.isArray(latestArgs.items)
+            ? latestArgs.items
+            : [];
+
+        // 시간 눈금
+        for (let hour = 0; hour < 24; hour++) {
+            const label = document.createElement("div");
+            label.className = "hour";
+            label.style.gridRow = `${hour + 1}`;
+            label.textContent = `${String(hour).padStart(2, "0")}:00`;
+            root.appendChild(label);
+        }
+
+        // 일정 시작 시간에 카드 하나를 배치하고 이용 시간만큼 병합
+        const occupied = new Set();
+
+        for (const item of items) {
+            const start = Number(item.start);
+            const duration = Number(item.duration);
+            const end = Math.min(start + duration, 24);
+
+            if (
+                !Number.isInteger(start) ||
+                !Number.isInteger(duration) ||
+                start < 0 || start >= 24 ||
+                duration < 1 ||
+                end <= start
+            ) {
+                continue;
+            }
+
+            const card = document.createElement("div");
+            card.className = "card";
+            card.style.gridRow = `${start + 1} / span ${end - start}`;
+
+            const content = document.createElement("div");
+            content.className = "card-content";
+
+            const title = document.createElement("div");
+            title.className = "card-title";
+            title.textContent = `📍 ${item.place}`;
+
+            const meta = document.createElement("div");
+            meta.className = "card-meta";
+            meta.textContent =
+                `${String(start).padStart(2, "0")}:00 시작 · ${duration}시간`;
+
+            content.append(title, meta);
+
+            const del = document.createElement("button");
+            del.className = "delete";
+            del.type = "button";
+            del.textContent = "✕";
+            del.title = `${item.place} 일정 삭제`;
+            del.setAttribute("aria-label", `${item.place} 일정 삭제`);
+
+            del.addEventListener("click", () => {
+                lastEventId += 1;
+
+                sendMessage("streamlit:setComponentValue", {
+                    dataType: "json",
+                    value: {
+                        action: "delete",
+                        place: item.place,
+                        event_id: `${Date.now()}-${lastEventId}`
+                    }
+                });
+            });
+
+            card.append(content, del);
+            root.appendChild(card);
+
+            for (let h = start; h < end; h++) {
+                occupied.add(h);
+            }
+        }
+
+        // 빈 시간에도 눈금과 같은 행 높이를 유지
+        for (let hour = 0; hour < 24; hour++) {
+            if (occupied.has(hour)) continue;
+
+            const empty = document.createElement("div");
+            empty.className = "empty";
+            empty.style.gridRow = `${hour + 1}`;
+            root.appendChild(empty);
+        }
+
+        requestAnimationFrame(() => {
+            sendMessage("streamlit:setFrameHeight", {
+                height: root.scrollHeight + 4
+            });
+        });
+    }
+
+    window.addEventListener("message", (event) => {
+        if (event.data && event.data.type === "streamlit:render") {
+            render(event.data.args || {});
+        }
+    });
+
+    sendMessage("streamlit:componentReady", {
+        apiVersion: 1
+    });
+
+
+</script>
+</body>
+</html>

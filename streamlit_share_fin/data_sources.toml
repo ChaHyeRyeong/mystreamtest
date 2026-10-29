@@ -1,0 +1,38 @@
+[profiles]
+path = "model_share/data/visitor_profiles.csv"
+
+[spots]
+path = "model_share/data/카카오맵_기준_관광지_리스트_fin.xlsx"
+
+[monthly_weights]
+path = "model_share/data/관광지별_월별_최종_L1정규화.xlsx"
+
+[model]
+path = "model_share/relative_congestion_score.pkl"
+
+[weather]
+path = "data/rain_calendar_366_18regions.csv"
+
+
+# 강원도 틈새여행 테마 (CSS가 닿지 않는 위젯 강조색·라디오·달력·진행 막대까지 같은 색으로 맞춘다)
+[theme]
+base = "light"
+primaryColor = "#3F8A6E"
+backgroundColor = "#FFFCF5"
+secondaryBackgroundColor = "#EEF7F1"
+textColor = "#34433D"
+borderColor = "#DCEBE2"
+baseRadius = "0.9rem"
+buttonRadius = "999px"
+font = "'Noto Sans KR':https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap"
+# headingFont = "Jua:https://fonts.googleapis.com/css2?family=Jua&display=swap"
+# st.info 안내 상자를 파란색 대신 연한 그린으로
+blueBackgroundColor = "#E8F5EE"
+blueTextColor = "#2E5E4E"
+chartCategoricalColors = ["#6DBE9A", "#F5C46B", "#F4A582", "#9CC7E8", "#C9A7E0"]
+
+[client]
+toolbarMode = "minimal"
+
+[server]
+headless = true
