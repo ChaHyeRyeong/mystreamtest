@@ -1,7 +1,6 @@
 streamlit
 pandas
 plotly
-html
 Path
 googleapiclient
 pydeck
