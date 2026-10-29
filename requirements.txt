@@ -1,8 +1,6 @@
 streamlit
 pandas
-datetime
 plotly
-math
 re
 html
 Path
@@ -10,3 +8,6 @@ googleapiclient
 pydeck
 seaborn
 matplotlib
+numpy
+scikit-learn
+catboost
