@@ -8,3 +8,4 @@ matplotlib
 numpy
 scikit-learn
 catboost
+openpyxl
