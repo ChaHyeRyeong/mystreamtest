@@ -14,10 +14,11 @@
         color: #34433D;
     }
 
+
     .timeline {
         display: grid;
         grid-template-columns: 52px minmax(0, 1fr);
-        grid-template-rows: repeat(24, 36px);
+        grid-template-rows: repeat(24, minmax(36px, auto));
         width: 100%;
     }
 
@@ -37,6 +38,7 @@
         justify-content: space-between;
         gap: 8px;
         min-width: 0;
+        min-height: 48px;
         margin: 2px 0 3px 6px;
         padding: 6px 8px 5px 10px;
         overflow: hidden;
@@ -48,6 +50,7 @@
             #F4FBF7 0%,
             #E8F5EE 100%
         );
+        z-index: 1;
     }
 
     .card-content {
@@ -61,6 +64,17 @@
         font-size: 13px;
         font-weight: 700;
         line-height: 1.35;
+        overflow-wrap: anywhere;
+        word-break: normal;
+
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        overflow: hidden;
+    }
+
+    .card-one-hour {
+        min-height: 48px;
     }
 
     .card-meta {
@@ -149,6 +163,9 @@
 
             const card = document.createElement("div");
             card.className = "card";
+            if (duration === 1) {
+                card.classList.add("card-one-hour");
+            }
             card.style.gridRow = `${start + 1} / span ${end - start}`;
 
             const content = document.createElement("div");

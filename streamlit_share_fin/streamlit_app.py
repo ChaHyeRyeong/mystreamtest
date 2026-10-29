@@ -860,7 +860,6 @@ else:
             weather_condition = "폭염"
             precipitation = 0.0
 
-
     def weather_cards_html(region_names, target_date_str):
         """선택 지역의 예상 날씨 카드 (날씨 CSV의 지역·월일 기준 평년 예측)"""
         df = load_weather_data()
@@ -1060,70 +1059,87 @@ else:
                 .to_dict()
             )
 
-            progress_area = st.empty()
+            # 검색 조건이 같으면 기존 결과 재사용
+            cache_key = (
+                selected_region,
+                target_date_str,
+                weather_condition,
+                precipitation,
+                tuple(filtered_places),
+            )
 
-            with progress_area.container():
-                progress = st.progress(0,text="혼잡도를 계산하고 있습니다...")
+            if st.session_state.get("_congestion_results_cache_key") == cache_key:
+                results = st.session_state["_congestion_results_cache"]
 
-            total_places = len(filtered_places)
+            else:
+                results = []
 
-            for idx, place in enumerate(filtered_places):
-                region_name = region_lookup.get(str(place).strip())
-                daily_result = get_daily_peak_congestion(
-                    place_name=place,
-                    target_date_str=target_date_str,
-                    model=model,
-                    profile_lookup=profile_lookup,
-                    place_monthly_weights=place_monthly_weights,
-                    indoor_status_map=indoor_status_map,
-                    weather_condition=weather_condition,
-                    precipitation=precipitation,
-                    region_name=region_name
-                )
-
-                score = daily_result["score"]
-                # indoor_type = indoor_status_map.get(
-                #     str(place).strip(), "야외"
-                # )
-
-                if score is None:
-                    results.append({
-                        "관광지명": place,
-                        "혼잡 등급": daily_result["status"],
-                        # "상태 색상": "⚪ 회색 (운영시간 외)",
-                        "예상 최고 혼잡도": None,
-                        "최고 혼잡 시간": None,
-                        "유효 예측 시간": daily_result["valid_hours"],
-                        "시간대별 점수": daily_result["hourly_scores"]
-                    })
-                else:
-                    if score <= 39:
-                        level = "여유"
-                    elif score <= 69:
-                        level = "보통"
-                    elif score <= 84:
-                        level = "주의"
-                    else:
-                        level = "혼잡"
-
-                    results.append({
-                        "관광지명": place,
-                        "혼잡 등급": level,
-                        # "상태 색상": badge_color,
-                        "예상 최고 혼잡도": score,
-                        "최고 혼잡 시간": daily_result["peak_hour"],
-                        "유효 예측 시간": daily_result["valid_hours"],
-                        "시간대별 점수": daily_result["hourly_scores"]
-                    })
-
-                # 진행률 표시
-                if total_places:
-                    progress.progress(
-                        (idx + 1) / total_places,
-                        text=f"혼잡도 계산 중... ({idx + 1}/{total_places})"
+                progress_area = st.empty()
+                with progress_area.container():
+                    progress = st.progress(
+                        0,
+                        text="혼잡도를 계산하고 있습니다..."
                     )
 
-            progress_area.empty()
+                total_places = len(filtered_places)
+
+                # 기존 혼잡도 계산 반복문을 여기에 그대로 유지
+                for idx, place in enumerate(filtered_places):
+                    region_name = region_lookup.get(str(place).strip())
+
+                    daily_result = get_daily_peak_congestion(
+                        place_name=place,
+                        target_date_str=target_date_str,
+                        model=model,
+                        profile_lookup=profile_lookup,
+                        place_monthly_weights=place_monthly_weights,
+                        indoor_status_map=indoor_status_map,
+                        weather_condition=weather_condition,
+                        precipitation=precipitation,
+                        region_name=region_name
+                    )
+
+                    score = daily_result["score"]
+
+                    if score is None:
+                        results.append({
+                            "관광지명": place,
+                            "혼잡 등급": daily_result["status"],
+                            "예상 최고 혼잡도": None,
+                            "최고 혼잡 시간": None,
+                            "유효 예측 시간": daily_result["valid_hours"],
+                            "시간대별 점수": daily_result["hourly_scores"]
+                        })
+                    else:
+                        if score <= 39:
+                            level = "여유"
+                        elif score <= 69:
+                            level = "보통"
+                        elif score <= 84:
+                            level = "주의"
+                        else:
+                            level = "혼잡"
+
+                        results.append({
+                            "관광지명": place,
+                            "혼잡 등급": level,
+                            "예상 최고 혼잡도": score,
+                            "최고 혼잡 시간": daily_result["peak_hour"],
+                            "유효 예측 시간": daily_result["valid_hours"],
+                            "시간대별 점수": daily_result["hourly_scores"]
+                        })
+
+                    if total_places:
+                        progress.progress(
+                            (idx + 1) / total_places,
+                            text=f"혼잡도 계산 중... ({idx + 1}/{total_places})"
+                        )
+                        
+                progress_area.empty()
+
+                # 계산 결과 저장
+                st.session_state["_congestion_results_cache_key"] = cache_key
+                st.session_state["_congestion_results_cache"] = results
 
             # --------------------------------------
             # 2) 혼잡도 필터 적용

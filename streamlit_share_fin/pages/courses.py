@@ -246,8 +246,16 @@ for idx, item in enumerate(route_places, start=1):
     price_html = ""
 
     if pd.notna(min_price) and pd.notna(max_price):
-        price_text = f"{int(min_price):,}~{int(max_price):,}원/인"
-        price_html = f'<div class="course-price-badge">💵 예상 비용: {price_text}</div>'
+        if min_price == 0 and max_price == 0:
+            price_text = "0원"
+        else:
+            price_text = f"{int(min_price):,}~{int(max_price):,}원/인"
+
+        price_html = (
+            f'<div class="course-price-badge">'
+            f'💵 예상 비용: {price_text}'
+            f'</div>'
+        )
     elif pd.notna(min_price):
         price_text = f"최소 {int(min_price):,}원/인"
         price_html = f'<div class="course-price-badge">💵 예상 비용: {price_text}</div>'
@@ -464,6 +472,32 @@ else:
 # ==========================================
 # 7. 전체 이동 거리·시간 요약 및 구간별 이동 정보
 # ==========================================
+
+# 코스 전체 예상 비용 합계
+total_min_price = 0
+total_max_price = 0
+
+for item in course:
+    price_info = price_lookup.get(item["place"], {})
+
+    min_price = price_info.get("최소 금액 (Min/1인)")
+    max_price = price_info.get("최대 금액 (Max/1인)")
+
+    if pd.notna(min_price):
+        total_min_price += min_price
+
+    if pd.notna(max_price):
+        total_max_price += max_price
+
+# 0~0원이면 0원으로 표시
+if total_min_price == 0 and total_max_price == 0:
+    total_price_text = "0원"
+else:
+    total_price_text = (
+        f"{int(total_min_price):,}~{int(total_max_price):,}원"
+    )
+
+    
 valid_results = [
     result for result in route_results
     if result["distance"] is not None and result["duration"] is not None
@@ -474,7 +508,7 @@ if valid_results:
     total_duration = sum(r["duration"] for r in valid_results)
 
     with st.container(key="route_summary_box"):
-        metric1, metric2, metric3 = st.columns(3)
+        metric1, metric2, metric3, metric4 = st.columns(4)
 
         with metric1:
             st.metric("이동 구간", f"{len(valid_results)}개")
@@ -485,11 +519,23 @@ if valid_results:
         with metric3:
             st.metric("총 이동 시간", format_duration(total_duration))
 
-    st.caption(
-        "총 이동 시간은 각 구간의 TMap 소요 시간을 합산한 값입니다. "
-        "관광지 체류 시간은 포함하지 않습니다."
-    )
+        with metric4:
+            st.metric("예상 총 비용", total_price_text)
 
+    # st.caption(
+    #     "총 이동 시간은 각 구간의 TMap 소요 시간을 합산한 값입니다. "
+    #     "관광지 체류 시간은 포함하지 않습니다."
+    # )
+    st.markdown(
+        """
+        <small style="color: #7A8A83;">
+        총 이동 시간은 각 구간의 TMap 소요 시간을 합산한 값입니다. 관광지 체류 시간은 포함하지 않습니다.<br>
+        방문시간 혼잡도와 예상 비용은 예상치입니다. 정확하지 않을 수 있습니다.<br>
+        </small>
+        """,
+        unsafe_allow_html=True
+    )
+st.markdown("<br>", unsafe_allow_html=True)
 st.markdown('<div class="course-section-title">🚗 구간별 이동 정보</div>', unsafe_allow_html=True)
 
 if not route_results:
@@ -539,7 +585,7 @@ else:
 # ==========================================
 # 8. Kakao Map 표시
 # ==========================================
-st.divider()
+#st.divider()
 st.markdown('<div class="course-section-title">🗺️ 코스 지도</div>', unsafe_allow_html=True)
 
 if not KAKAO_MAP_API_KEY:

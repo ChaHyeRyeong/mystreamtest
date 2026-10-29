@@ -462,3 +462,45 @@ div:has(> [data-testid="stMetric"]) {
     justify-content: center !important;
     align-items: center !important;
 }
+
+/* ==========================================
+   코스 전체 이동 요약 - 왼쪽 정렬 및 폰트 축소
+   ========================================== */
+
+.st-key-route_summary_box {
+    padding: 14px 20px !important;
+}
+
+/* 지표 내부 왼쪽 정렬 */
+.st-key-route_summary_box [data-testid="stMetric"] {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start !important;
+    justify-content: center;
+    padding-left: 30px;
+    text-align: left !important;
+}
+
+/* 지표 제목 */
+.st-key-route_summary_box [data-testid="stMetricLabel"] {
+    width: 100%;
+    color: var(--muted);
+    font-size: 20px !important;
+    text-align: left !important;
+}
+
+/* 지표 값 */
+.st-key-route_summary_box [data-testid="stMetricValue"] {
+    width: 100%;
+    color: var(--green-900);
+    font-size: 23px !important;
+    font-weight: 700;
+    text-align: left !important;
+}
+
+/* 4개 지표 컬럼 간격 */
+.st-key-route_summary_box [data-testid="stHorizontalBlock"] {
+    justify-content: flex-start !important;
+    align-items: center !important;
+    gap: 12px;
+}

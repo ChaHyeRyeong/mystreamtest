@@ -890,3 +890,11 @@ div.react-aria-ComboBox:has(input[aria-label="정렬 기준"])
         border-radius: 15px;
     }
 }
+
+/* 1시간 일정 카드 잘림 확인 */
+.timeline-grid-card {
+    height: auto !important;
+    min-height: 0 !important;
+    overflow: visible !important;
+    box-sizing: border-box;
+}
