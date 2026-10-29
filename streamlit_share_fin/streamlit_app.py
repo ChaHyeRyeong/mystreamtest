@@ -234,7 +234,7 @@ def add_place_dialog(
     with st.form(f"course_form_{place_name}"):
 
         start_hour = st.selectbox(
-            "방문 시작 시간",
+            "방문예정 시간",
             options=list(range(24)),
             index=10,
             format_func=lambda h: f"{h:02d}:00"
